@@ -38,7 +38,7 @@ if __name__ == '__main__':
         python_requires='>=3.5',
         entry_points={
             'console_scripts': [
-                'pytorch-fid = pytorch_fid.fid_score:main',
+                'pytorch-fid_HDR = pytorch_fid.fid_score:main',
             ],
         },
         install_requires=[
