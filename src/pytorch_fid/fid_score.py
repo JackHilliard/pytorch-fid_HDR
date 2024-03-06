@@ -85,13 +85,13 @@ class ImagePathDataset(torch.utils.data.Dataset):
 
     def __getitem__(self, i):
         path = self.files[i]
-        print(str(path))
-        print(path)
-        if '.exr' in path:
-           hdr_img = im.imread(path,'EXR-FI')
+        #print(str(path))
+        #print(path)
+        if '.exr' in str(path):
+           hdr_img = im.imread(str(path),'EXR-FI')
            img = hdr_img[...,:3]
-        elif '.hdr' in path:
-           hdr_img = im.imread(path,'HDR-FI')
+        elif '.hdr' in str(path):
+           hdr_img = im.imread(str(path),'HDR-FI')
            img = hdr_img[...,:3]
         else:
             img = Image.open(path).convert('RGB')
