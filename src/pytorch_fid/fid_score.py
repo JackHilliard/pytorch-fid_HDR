@@ -39,6 +39,7 @@ import numpy as np
 import torch
 import torchvision.transforms as TF
 from PIL import Image
+import imageio as im
 from scipy import linalg
 from torch.nn.functional import adaptive_avg_pool2d
 
@@ -71,7 +72,7 @@ parser.add_argument('path', type=str, nargs=2,
                           'to .npz statistic files'))
 
 IMAGE_EXTENSIONS = {'bmp', 'jpg', 'jpeg', 'pgm', 'png', 'ppm',
-                    'tif', 'tiff', 'webp'}
+                    'tif', 'tiff', 'webp', 'exr', 'hdr'}
 
 
 class ImagePathDataset(torch.utils.data.Dataset):
@@ -84,7 +85,14 @@ class ImagePathDataset(torch.utils.data.Dataset):
 
     def __getitem__(self, i):
         path = self.files[i]
-        img = Image.open(path).convert('RGB')
+        if '.exr' in path:
+           hdr_img = im.imread(path,'EXR-FI')
+           img = hdr_img[...,:3]
+        elif '.hdr' in path:
+           hdr_img = im.imread(path,'HDR-FI')
+           img = hdr_img[...,:3]
+        else:
+            img = Image.open(path).convert('RGB')
         if self.transforms is not None:
             img = self.transforms(img)
         return img
